@@ -1,14 +1,15 @@
 package com.camerondevelope.ui.action;
 
 import com.camerondevelope.common.StringUtil;
+import com.camerondevelope.config.Configuration;
 import com.camerondevelope.facebook.FacebookLoginCookie;
-import com.camerondevelope.facebook.graphapi.FBGraphType;
-import com.camerondevelope.facebook.graphapi.ReadRest;
 import com.google.appengine.repackaged.com.google.common.collect.Lists;
 import com.opensymphony.xwork2.ActionSupport;
+import com.restfb.Connection;
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.types.User;
 import org.apache.struts2.interceptor.CookiesAware;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class FacebookLogin extends ActionSupport implements CookiesAware {
     private String fullname;
     private String friends;
     private FacebookLoginCookie facebookLoginCookie;
+    private FacebookClient facebookClient;
 
     public FacebookLogin() {}
 
@@ -34,12 +36,10 @@ public class FacebookLogin extends ActionSupport implements CookiesAware {
     }
 
     private String getFBFullname() {
-        if (!validateFBLogin()) {
-            return "";
-        }
         try {
-            JSONObject profile = ReadRest.getInstance().read(facebookLoginCookie.getUid());
-            return profile.getString("name");
+            User user = facebookClient.fetchObject(facebookLoginCookie.getUid(), User.class);
+            return user.getName();
+
         } catch (Exception e) {
             // TODO: Logging
             return "";
@@ -47,20 +47,15 @@ public class FacebookLogin extends ActionSupport implements CookiesAware {
     }
 
     private String getFBFriends() {
-        if (!validateFBLogin()) {
-            return "";
-        }
         try {
-            // TODO: All this Json nonsense into a facebook thing
-            JSONObject friends = ReadRest.getInstance().read(facebookLoginCookie, facebookLoginCookie.getUid(), FBGraphType.FRIENDS);
-            JSONArray friendArray = friends.getJSONArray("data");
-            List<String> friendsStrings = Lists.newLinkedList();
-            int len = friendArray.length();
-            for (int i = 0; i < len; i++) {
-                JSONObject jsonObject = friendArray.getJSONObject(i);
-                friendsStrings.add(jsonObject.getString("name"));
+            Connection<User> connectionFriends = facebookClient.fetchConnection(facebookLoginCookie.getUid()+"/friends", User.class);
+
+            List<String> names = Lists.newLinkedList();
+            for (User friend : connectionFriends.getData()) {
+                names.add(friend.getName());
             }
-            return StringUtil.implode(",", friendsStrings);
+            return StringUtil.implode(",", names);
+
         } catch (Exception e) {
             // TODO: Logging
             return "";
@@ -73,7 +68,10 @@ public class FacebookLogin extends ActionSupport implements CookiesAware {
 
     @Override
     public void setCookiesMap(Map<String, String> cookie) {
-        facebookLoginCookie = new FacebookLoginCookie(cookie);        
+        facebookLoginCookie = new FacebookLoginCookie(cookie);
+        if (facebookLoginCookie.isValid()) {
+            facebookClient = new DefaultFacebookClient(facebookLoginCookie.getAccessToken());
+        }
     }
 
     public String getFullname() {
@@ -93,6 +91,6 @@ public class FacebookLogin extends ActionSupport implements CookiesAware {
     }
 
     public String getFbAppId() {
-        return FacebookLoginCookie.APPLICATION_ID;
+        return Configuration.getInstance().getApplicationId();
     }
 }

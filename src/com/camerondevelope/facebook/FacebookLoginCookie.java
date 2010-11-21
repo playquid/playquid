@@ -1,6 +1,7 @@
 package com.camerondevelope.facebook;
 
 import com.camerondevelope.common.StringUtil;
+import com.camerondevelope.config.Configuration;
 import com.google.appengine.repackaged.com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -14,12 +15,6 @@ import java.util.Map;
  */
 public class FacebookLoginCookie {
 
-    // TODO: Add to config
-    //*DEV:*/ public static final String APPLICATION_ID = "166675046698226";
-    //*DEV:*/ public static final String APPLICATION_SECRET = "62b5f154211b517cc62f9d24ae1d9945";
-    /*PROD:*/ public static final String APPLICATION_ID = "133294296724238";
-    /*PROD:*/ public static final String APPLICATION_SECRET = "df444fffb20ce2376778322e7539094b";
-
     private final String accessToken;
     private final String secret;
     private final String sessionKey;
@@ -29,6 +24,9 @@ public class FacebookLoginCookie {
     private final Map<String, String> fbsMap;
 
     public FacebookLoginCookie(Map<String, String> cookie) {
+
+        final String APPLICATION_ID = Configuration.getInstance().getApplicationId();
+        final String APPLICATION_SECRET = Configuration.getInstance().getApplicationSecret();
 
         String payload = "";
 

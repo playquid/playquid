@@ -5,6 +5,9 @@
         "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
+
+    <constant name="struts.action.excludePattern" value="/_ah/.*"/>
+
     <package name="default" namespace="/" extends="struts-default">
 
         <action name="FacebookLogin" class="com.camerondevelope.ui.action.FacebookLogin">

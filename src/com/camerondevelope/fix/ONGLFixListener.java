@@ -1,13 +1,13 @@
 package com.camerondevelope.fix;
 
+import ognl.OgnlRuntime;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-
-import ognl.OgnlRuntime;
 
 // Idea taken from http://programmingpanda.blogspot.com/2009/07/struts-2-ongl-issue-on-google-app.html
 public class ONGLFixListener  implements ServletContextListener, HttpSessionListener, HttpSessionAttributeListener {
