@@ -1,10 +1,14 @@
 package com.camerondevelope.facebook;
 
+import com.camerondevelope.common.Md5;
 import com.camerondevelope.common.StringUtil;
 import com.camerondevelope.config.Configuration;
 import com.google.appengine.repackaged.com.google.common.collect.Maps;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,6 +18,8 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class FacebookLoginCookie {
+
+    private static final Logger log = Logger.getLogger(FacebookLoginCookie.class.getName());
 
     private final String accessToken;
     private final String secret;
@@ -25,12 +31,12 @@ public class FacebookLoginCookie {
 
     public FacebookLoginCookie(Map<String, String> cookie) {
 
-        final String APPLICATION_ID = Configuration.getInstance().getApplicationId();
-        final String APPLICATION_SECRET = Configuration.getInstance().getApplicationSecret();
+        final String applicationId = Configuration.getInstance().getApplicationId();
+        final String applicationSecret = Configuration.getInstance().getApplicationSecret();
 
         String payload = "";
 
-        final String fbs = cookie.get("fbs_"+APPLICATION_ID);
+        final String fbs = cookie.get("fbs_"+applicationId);
 
         if (fbs == null) {
             accessToken = null;
@@ -48,14 +54,20 @@ public class FacebookLoginCookie {
             for (final String keyVal : fbs.split("&")) {
                 String[] keyValStrings = keyVal.split("=", 2);
                 if (keyValStrings.length == 2) {
-                    if (!String.valueOf(keyValStrings[0]).equals("sig")) {
-                        payload += keyVal;
+                    try {
+                        String key = keyValStrings[0];
+                        String val = URLDecoder.decode(keyValStrings[1], "UTF-8");
+                        if (!String.valueOf(key).equals("sig")) {
+                            payload = payload + key + '=' + val;
+                        }
+                        inMap.put(key, val);
+                    } catch (UnsupportedEncodingException e) {
+                        log.severe("Cannot decode url utf8");
                     }
-                    inMap.put(keyValStrings[0], keyValStrings[1]);
                 }
             }
 
-            if (payloadGood(payload+APPLICATION_SECRET, inMap.get("sig"))) {
+            if (payloadGood(payload+applicationSecret, inMap.get("sig"))) {
                 fbsMap = inMap;
             } else {
                 fbsMap = Maps.newHashMap();
@@ -68,12 +80,17 @@ public class FacebookLoginCookie {
         }
     }
 
+    /**
+     * Computed based on algo from http://developers.facebook.com/docs/guides/web#login
+     * @param payload
+     * @param sig
+     * @return
+     */
     private boolean payloadGood(final String payload, final String sig) {
         if (StringUtil.isEmpty(payload) || StringUtil.isEmpty(sig)) {
             return false;
         }
-        //return sig.equals(Md5.compute(payload));
-        return true;//TODO:Figure out what is going on here
+        return sig.equals(Md5.compute(payload));
     }
     
     public String getAccessToken() {

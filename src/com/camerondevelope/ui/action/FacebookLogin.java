@@ -13,6 +13,7 @@ import org.apache.struts2.interceptor.CookiesAware;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,6 +23,9 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 public class FacebookLogin extends ActionSupport implements CookiesAware {
+
+    private static final Logger log = Logger.getLogger(FacebookLogin.class.getName());
+
     private String fullname;
     private String friends;
     private FacebookLoginCookie facebookLoginCookie;
@@ -41,7 +45,7 @@ public class FacebookLogin extends ActionSupport implements CookiesAware {
             return user.getName();
 
         } catch (Exception e) {
-            // TODO: Logging
+            log.severe("Unable to read user information with fblc="+facebookLoginCookie);
             return "";
         }
     }
@@ -57,7 +61,7 @@ public class FacebookLogin extends ActionSupport implements CookiesAware {
             return StringUtil.implode(",", names);
 
         } catch (Exception e) {
-            // TODO: Logging
+            log.severe("Unable to read user information with fblc="+facebookLoginCookie);
             return "";
         }
     }
