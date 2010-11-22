@@ -23,13 +23,22 @@
 
         <default-interceptor-ref name="defaultFBLogin"/>
 
+        <!-- Global results -->
+        <global-results>
+            <result name="notloggedin" type="redirectAction">home</result>
+        </global-results>
+
+        <!-- DTD seems to say "" is wrong, but it seems to work for www.example.com/ -->
+        <action name="" class="com.camerondevelope.ui.action.HomeAction">
+            <result name="success">home.jsp</result>
+        </action>
+
         <action name="home" class="com.camerondevelope.ui.action.HomeAction">
             <result name="success">home.jsp</result>
         </action>
 
         <action name="view" class="com.camerondevelope.ui.action.ViewAction">
             <result name="success">view.jsp</result>
-            <result name="notloggedin" type="redirectAction">home</result>
         </action>
 
     </package>

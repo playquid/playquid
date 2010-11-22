@@ -18,7 +18,7 @@
 
 <script type="text/javascript">
     window.fbAsyncInit = function() {
-        FB.init({appId: '<s:property value="fBAppId" />', status: true, cookie: true, xfbml: true});
+        FB.init({appId: '<s:property value="fBAppId" />', status: false, cookie: true, xfbml: true});
         App.onFBLogin = '<s:url action="view" />';
         App['fbAsyncInitCallback'] && App['fbAsyncInitCallback']();
     };

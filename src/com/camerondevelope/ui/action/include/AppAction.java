@@ -14,19 +14,13 @@ import java.util.List;
  * Overall action to put generic stuff into
  */
 public class AppAction extends ActionSupport {
+
+    public final static String SUCCESS = "success";
+
     private List<String> jsFiles = Lists.newLinkedList();
     private List<String> cssFiles = Lists.newLinkedList();
     private List<String> jsUrls = Lists.newLinkedList();
     private List<String> jsUrlsAsync = Lists.newLinkedList();
-
-    private class ScriptUrl {
-        public String url;
-        public boolean async;
-        private ScriptUrl(String url, boolean async) {
-            this.url = url;
-            this.async = async;
-        }
-    }
 
     public AppAction() {
         addCSSFile("reset");

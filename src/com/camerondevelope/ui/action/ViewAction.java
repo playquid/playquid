@@ -28,7 +28,7 @@ public class ViewAction extends RequireFBLogingAction {
     public String executeAfter() {
         setFullname(getFBFullname());
         setFriends(getFBFriends());
-        return "success";
+        return SUCCESS;
     }
 
     private String getFBFullname() {

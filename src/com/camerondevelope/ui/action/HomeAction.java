@@ -20,7 +20,7 @@ public class HomeAction extends AcceptFBLoginAction {
     public String execute() {
         addJSUrl("https://connect.facebook.net/en_US/all.js", true);
         addJSFile("facebook");
-        return "success";
+        return SUCCESS;
     }
 
 }

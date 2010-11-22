@@ -1,7 +1,5 @@
 package com.camerondevelope.ui.action.include;
 
-import com.camerondevelope.ui.action.include.AcceptFBLoginAction;
-
 /**
  * Created by IntelliJ IDEA.
  * User: loyd
@@ -11,10 +9,12 @@ import com.camerondevelope.ui.action.include.AcceptFBLoginAction;
  */
 abstract public class RequireFBLogingAction extends AcceptFBLoginAction {
 
+    public static final String NOT_LOGGED_IN = "notloggedin";
+
     @Override
     public String execute() {
         if (!isFBLoggedIn()) {
-            return "notloggedin";
+            return NOT_LOGGED_IN;
         }
         return executeAfter();
     }
