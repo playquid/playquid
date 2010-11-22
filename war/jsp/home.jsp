@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@taglib uri="/struts-tags" prefix="s" %>
-<s:include value="include/header.jsp"><s:param name="title">Home</s:param></s:include>
+<s:include value="../include/header.jsp"><s:param name="title">Home</s:param></s:include>
 
 <h1>Welcome</h1>
 <p><fb:login-button autologoutlink="true" perms="publish_stream,create_event,rsvp_event,offline_access,user_events,friends_events,user_work_history,friends_work_history,email,user_location,friends_location"></fb:login-button></p>
@@ -24,4 +24,4 @@
     };
 </script>
 
-<s:include value="include/footer.jsp" />
+<s:include value="../include/footer.jsp" />

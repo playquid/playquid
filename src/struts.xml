@@ -30,15 +30,15 @@
 
         <!-- DTD seems to say "" is wrong, but it seems to work for www.example.com/ -->
         <action name="" class="com.camerondevelope.ui.action.HomeAction">
-            <result name="success">home.jsp</result>
+            <result name="success">jsp/home.jsp</result>
         </action>
 
         <action name="home" class="com.camerondevelope.ui.action.HomeAction">
-            <result name="success">home.jsp</result>
+            <result name="success">jsp/home.jsp</result>
         </action>
 
         <action name="view" class="com.camerondevelope.ui.action.ViewAction">
-            <result name="success">view.jsp</result>
+            <result name="success">jsp/view.jsp</result>
         </action>
 
     </package>
