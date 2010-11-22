@@ -7,15 +7,30 @@
 <struts>
 
     <constant name="struts.action.excludePattern" value="/_ah/.*"/>
+    <constant name="struts.devMode" value="false" />
 
     <package name="default" namespace="/" extends="struts-default">
 
-        <action name="FacebookLogin" class="com.camerondevelope.ui.action.FacebookLogin">
-             <interceptor-ref name="cookie">
-                <param name="cookiesName">*</param>
-             </interceptor-ref>
-            <result name="success">success.jsp</result>
-        </action>        
+        <interceptors>
+            <interceptor-stack name="defaultFBLogin">
+                <interceptor-ref name="cookie">
+                    <param name="cookiesName">*</param>
+                </interceptor-ref>
+
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+
+        <default-interceptor-ref name="defaultFBLogin"/>
+
+        <action name="home" class="com.camerondevelope.ui.action.HomeAction">
+            <result name="success">home.jsp</result>
+        </action>
+
+        <action name="view" class="com.camerondevelope.ui.action.ViewAction">
+            <result name="success">view.jsp</result>
+            <result name="notloggedin" type="redirectAction">home</result>
+        </action>
 
     </package>
 
