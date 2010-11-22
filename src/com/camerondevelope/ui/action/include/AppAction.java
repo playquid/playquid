@@ -30,6 +30,7 @@ public class AppAction extends ActionSupport {
 
     public AppAction() {
         addCSSFile("reset");
+        addCSSFile("main");
         addJSUrl("https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js");
     }
 
